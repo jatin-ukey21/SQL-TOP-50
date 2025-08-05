@@ -1,55 +1,70 @@
-# 📊 Problem: [Recyclable and Low Fat Products]
+
+# 📊 Problem: Recyclable and Low Fat Products
 
 ## 📘 Description
 
 > **Problem Statement:**
->Table: Products
 
--------------------------
-| Column Name | Type    |
--------------------------
-| product_id  | int     |
-| low_fats    | enum    |
-| recyclable  | enum    |
->-------------------------
->product_id is the primary key (column with unique values) for this table.
->low_fats is an ENUM (category) of type ('Y', 'N') where 'Y' means this product is low fat and 'N' means it is not.
->recyclable is an ENUM (category) of types ('Y', 'N') where 'Y' means this product is recyclable and 'N' means it is not.
- 
-Write a solution to find the ids of products that are both low fat and recyclable.
+Table: `Products`
+
+```
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| product_id  | int      |
+| low_fats    | enum     |
+| recyclable  | enum     |
++-------------+----------+
+```
+
+- `product_id` is the primary key (unique values).
+- `low_fats` is an ENUM with values `'Y'` or `'N'`, where `'Y'` means the product is low fat.
+- `recyclable` is an ENUM with values `'Y'` or `'N'`, where `'Y'` means the product is recyclable.
+
+Write a SQL query to **find the IDs of products that are both low fat and recyclable**.
+
 ---
 
 ## 📥 Input Example
 
-Products table:
----------------------------------------
-| product_id  | low_fats | recyclable |
----------------------------------------
-| 0           | Y        | N          |
-| 1           | Y        | Y          |
-| 2           | N        | Y          |
-| 3           | Y        | Y          |
-| 4           | N        | N          |
----------------------------------------
+Table: `Products`
+
+```
++------------+-----------+-------------+
+| product_id | low_fats  | recyclable  |
++------------+-----------+-------------+
+|     0      |    Y      |     N       |
+|     1      |    Y      |     Y       |
+|     2      |    N      |     Y       |
+|     3      |    Y      |     Y       |
+|     4      |    N      |     N       |
++------------+-----------+-------------+
+```
 
 ---
 
 ## 🎯 Output Example
 
----------------
-| product_id  |
----------------
-| 1           |
-| 3           |
----------------
+```
++------------+
+| product_id |
++------------+
+|     1      |
+|     3      |
++------------+
+```
 
-## Explanation
-Only products 1 and 3 are both low fat and recyclable.
+## 🧠 Explanation
+
+Only products with both `low_fats = 'Y'` **and** `recyclable = 'Y'` qualify.  
+In this case, `product_id` 1 and 3 satisfy both conditions.
 
 ---
 
 ## 💡 SQL Query
 
 ```sql
-SELECT PRODUCT_ID FROM PRODUCTS
-WHERE LOW_FATS = 'Y' AND RECYCLABLE = 'Y';
+SELECT product_id
+FROM Products
+WHERE low_fats = 'Y' AND recyclable = 'Y';
+```
