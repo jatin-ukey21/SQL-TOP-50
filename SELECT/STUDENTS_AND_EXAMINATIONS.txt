@@ -1,0 +1,96 @@
+STUDENTS AND EXAMINATIONS
+
+📌 Problem Summary:
+You are given three tables:
+1. Students - Contains student_id and student_name
+2. Subjects - Contains subject_name
+3. Examinations - Logs which student took which subject's exam (may have duplicates)
+Each student from the Students table takes every course from the Subjects table.
+
+🎯 Goal:
+Find how many times each student appeared for each subject's exam.
+Even if they didn't appear (i.e., count = 0), still show the record.
+
+📥 Sample Input:
+Students table:
++------------+--------------+
+| student_id | student_name |
++------------+--------------+
+| 1          | Alice        |
+| 2          | Bob          |
+| 13         | John         |
+| 6          | Alex         |
++------------+--------------+
+Subjects table:
++--------------+
+| subject_name |
++--------------+
+| Math         |
+| Physics      |
+| Programming  |
++--------------+
+Examinations table:
++------------+--------------+
+| student_id | subject_name |
++------------+--------------+
+| 1          | Math         |
+| 1          | Physics      |
+| 1          | Programming  |
+| 2          | Programming  |
+| 1          | Physics      |
+| 1          | Math         |
+| 13         | Math         |
+| 13         | Programming  |
+| 13         | Physics      |
+| 2          | Math         |
+| 1          | Math         |
++------------+--------------+.
+
+📤 Expected Output:
+All (student, subject) pairs with a count of how many times the student appeared.
++------------+--------------+--------------+----------------+
+| student_id | student_name | subject_name | attended_exams |
++------------+--------------+--------------+----------------+
+| 1          | Alice        | Math         | 3              |
+| 1          | Alice        | Physics      | 2              |
+| 1          | Alice        | Programming  | 1              |
+| 2          | Bob          | Math         | 1              |
+| 2          | Bob          | Physics      | 0              |
+| 2          | Bob          | Programming  | 1              |
+| 6          | Alex         | Math         | 0              |
+| 6          | Alex         | Physics      | 0              |
+| 6          | Alex         | Programming  | 0              |
+| 13         | John         | Math         | 1              |
+| 13         | John         | Physics      | 1              |
+| 13         | John         | Programming  | 1              |
++------------+--------------+--------------+----------------+ 0
+
+🧠 How the Query Works:
+
+SELECT
+  S.student_id,
+  S.student_name,
+  SB.subject_name,
+  COUNT(E.subject_name) AS attended_exams
+
+FROM Students S
+CROSS JOIN Subjects SB
+  → This creates every possible combination of student and subject.
+
+LEFT JOIN Examinations E
+  ON S.student_id = E.student_id AND SB.subject_name = E.subject_name
+  → Brings exam records matching the student and subject.
+  → If no match (student didn’t appear), E.subject_name will be NULL.
+
+GROUP BY S.student_id, S.student_name, SB.subject_name
+  → Groups the results by each (student, subject) pair.
+
+ORDER BY S.student_id, SB.subject_name
+  → Neatly sorts the result.
+
+COUNT(E.subject_name)
+  → Counts how many times each student appeared for that subject.
+  → Returns 0 if they didn’t appear at all.
+
+✅ Output: A complete table of every student + every subject + count of exams attended.
+
